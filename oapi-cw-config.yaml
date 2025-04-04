@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/oapi-codegen/oapi-codegen/HEAD/configuration-schema.json
+package: go_connectwise
+generate:
+  models: true
+  client: true
+#output-options:
+#  include-tags:
+#    - Tickets
+#    - TicketNotes
+#    - ServiceTicketNotes
+#    - Companies
+#    - Contacts
+#    - Agreements
+#    - AgreementAdditions
+#    - CompanySites
+#    - Projects
+#    - ProjectNotes
+
+output: connectwise.gen.go
