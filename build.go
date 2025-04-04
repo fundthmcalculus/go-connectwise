@@ -31,7 +31,30 @@ type ClientOptions struct {
 var clientOnce sync.Once
 var cwClient *ClientWithResponses
 
-// ConnectToConnectWise - initializes the connection to the ConnectWise API
+// ConnectToConnectWise3 - initializes the connection to the ConnectWise API, providing all arguments
+func ConnectToConnectWise3(baseURL, company, clientId, publicKey, privateKey string) *ClientWithResponses {
+	clientOnce.Do(func() {
+		log.Debug("Connecting to connectwise API with provided arguments")
+		options, err := CreateOrGetClient(baseURL, company, clientId, publicKey, privateKey)
+		if err != nil {
+			log.Fatal(err)
+		}
+		cwApi, err := NewClientWithResponses(options.baseURL,
+			WithRequestEditorFn(func(ctx context.Context, req *http.Request) error {
+				options.SetHeaders(req)
+				return nil
+			}))
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Debug(cwApi)
+		log.Info("Connected to connectwise API")
+		cwClient = cwApi
+	})
+	return cwClient
+}
+
+// ConnectToConnectWise - initializes the connection to the ConnectWise API, loading from the environment variables
 func ConnectToConnectWise() *ClientWithResponses {
 	clientOnce.Do(func() {
 		cwClient = connectToConnectWise2()
@@ -41,7 +64,7 @@ func ConnectToConnectWise() *ClientWithResponses {
 
 func connectToConnectWise2() *ClientWithResponses {
 	log.Debug("Connecting to connectwise API")
-	options, _ := CreateOrGetClient()
+	options, _ := CreateOrGetClient("", "", "", "", "") // Load from environment variables if not provided
 	cwApi, err := NewClientWithResponses("https://na.myconnectwise.net/v4_6_release/apis/3.0",
 		WithRequestEditorFn(func(ctx context.Context, req *http.Request) error {
 			options.SetHeaders(req)
@@ -56,23 +79,33 @@ func connectToConnectWise2() *ClientWithResponses {
 	return cwApi
 }
 
-func CreateOrGetClient() (*ClientOptions, error) {
+func CreateOrGetClient(baseUrl, company, clientId, publicKey, privateKey string) (*ClientOptions, error) {
 	once.Do(func() {
 		// Get required environment variables
-		baseURL := os.Getenv("CW_BASE_URL")
-		company := os.Getenv("CW_COMPANY")
-		clientId := os.Getenv("CW_CLIENT_ID")
-		publicKey := os.Getenv("CW_PUBLIC_KEY")
-		privateKey := os.Getenv("CW_PRIVATE_KEY")
+		if baseUrl == "" {
+			baseUrl = os.Getenv("CW_BASE_URL")
+		}
+		if company == "" {
+			company = os.Getenv("CW_COMPANY")
+		}
+		if clientId == "" {
+			clientId = os.Getenv("CW_CLIENT_ID")
+		}
+		if publicKey == "" {
+			publicKey = os.Getenv("CW_PUBLIC_KEY")
+		}
+		if privateKey == "" {
+			privateKey = os.Getenv("CW_PRIVATE_KEY")
+		}
 
 		// Validate required environment variables
-		if baseURL == "" || company == "" || publicKey == "" || privateKey == "" || clientId == "" {
+		if baseUrl == "" || company == "" || publicKey == "" || privateKey == "" || clientId == "" {
 			singletonErr = fmt.Errorf("missing required environment variables. Please ensure CW_BASE_URL, CW_COMPANY, CW_CLIENT_ID, CW_PUBLIC_KEY, and CW_PRIVATE_KEY are set")
 			return
 		}
 
 		// Create the client
-		singleClient = NewClientOptions(baseURL, company, clientId, publicKey, privateKey)
+		singleClient = NewClientOptions(baseUrl, company, clientId, publicKey, privateKey)
 	})
 
 	if singletonErr != nil {

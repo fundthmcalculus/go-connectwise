@@ -25,7 +25,7 @@ type OpenApiTagData struct {
 func TestCreateBuildConfigs(t *testing.T) {
 	// Because of the size of the cw-api.json, we split up the files for the editors' sake.
 	// Load cw-api.json.
-	cwApiJsonData, err := os.ReadFile("./cw-api.json")
+	cwApiJsonData, err := os.ReadFile("./cw-sample.json")
 	if err != nil {
 		t.Fatalf("Failed to read cw-api.json: %v", err)
 	}

@@ -1,0 +1,157 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Connectwise Manage Public Endpoints",
+    "version": "2024.13"
+  },
+  "servers": [
+    {
+      "url": "http://na.myconnectwise.net/v4_6_release/apis/3.0"
+    }
+  ],
+  "paths": {
+    "/company/addressFormats": {
+      "get": {
+        "tags": [
+          "AddressFormats"
+        ],
+        "summary": "Get List of AddressFormat",
+        "operationId": "getCompanyAddressFormats",
+        "parameters": [
+          {
+            "name": "conditions",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "childConditions",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "customFieldConditions",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "pageId",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "clientId",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of AddressFormat",
+            "content": {
+              "application/vnd.connectwise.com+json; version=2024.13": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "AddressFormats"
+        ],
+        "summary": "Post AddressFormat",
+        "operationId": "postCompanyAddressFormats",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "addressFormat",
+          "content": {
+            "application/json": {
+              "schema": {
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "AddressFormat",
+            "content": {
+              "application/vnd.connectwise.com+json; version=2024.13": {
+                "schema": {
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
