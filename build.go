@@ -1,4 +1,4 @@
-package go_connectwise
+package main
 
 import (
 	"context"
